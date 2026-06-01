@@ -1,0 +1,8 @@
+# Core
+anthropic>=0.40.0
+
+# Optional: only needed if you load ANTHROPIC_API_KEY from a .env file
+python-dotenv>=1.0.0
+
+# Dev / tests
+pytest>=8.0.0

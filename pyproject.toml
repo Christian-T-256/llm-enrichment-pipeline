@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-enrichment-pipeline"
+version = "1.0.0"
+description = "A cost-guarded, hallucination-checked LLM pipeline for structured record enrichment."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Christian Terrone" }]
+dependencies = [
+    "anthropic>=0.40.0",
+]
+
+[project.optional-dependencies]
+dotenv = ["python-dotenv>=1.0.0"]
+dev = ["pytest>=8.0.0"]
+
+[project.scripts]
+enrich = "enrichment.__main__:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]
