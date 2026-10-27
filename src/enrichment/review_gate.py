@@ -1,6 +1,6 @@
 """First-run human sample-review gate.
 
-Generation pipelines drift silently: a prompt tweak or a model bump can quietly
+Generation pipelines drift silently: a prompt tweak or a model bump can slowly
 degrade output, and "the run completed" tells you nothing about whether the
 output is any good. So on the first run for a given dataset, we dump a sample of
 the post-extraction state to CSV and block until a human signals approval (by
