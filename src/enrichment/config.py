@@ -26,7 +26,7 @@ BATCH_DISCOUNT = 0.5
 
 @dataclass(frozen=True)
 class Limits:
-    """Input-size caps. These are cost levers, not correctness levers — the
+    """Input-size caps. These are cost levers, not correctness levers. The
     extraction stages only need a representative slice of source text, and
     feeding the full thing was the single largest driver of per-record cost.
     """
@@ -45,7 +45,7 @@ class Limits:
 class Settings:
     """Per-run settings, populated from CLI flags."""
 
-    max_cost: float                       # hard USD cap — required, no default
+    max_cost: float                       # hard USD cap (required, no default)
     dry_run: bool = False                 # use the offline mock backend
     resume_checkpoint: str | None = None  # path to a pre-generation checkpoint
     review_gate: bool = True              # block first run for human sample review

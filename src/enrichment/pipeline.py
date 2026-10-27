@@ -57,7 +57,7 @@ def is_eligible(record: dict) -> bool:
     """Cost gate, not a quality gate. We require website text because it is the
     load-bearing anchor for *both* generation routes; with neither website nor
     profile text there is nothing to extract or write from. We deliberately do
-    NOT also require a profile — an over-strict AND-filter here drops records the
+    NOT also require a profile: an over-strict AND-filter here drops records the
     observation fallback could have handled. Filter at the latest safe stage."""
     return bool((record.get("website_text") or "").strip() or
                 (record.get("profile_text") or "").strip())

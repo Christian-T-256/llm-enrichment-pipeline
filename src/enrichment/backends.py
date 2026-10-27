@@ -2,11 +2,11 @@
 
 The pipeline talks to a `Backend`, never to a vendor SDK. Two implementations:
 
-* `AnthropicBackend` — wraps the real `anthropic` SDK and, crucially, translates
+* `AnthropicBackend`: wraps the real `anthropic` SDK and, crucially, translates
   its exception zoo into our three-class taxonomy (`errors.py`). The credit-out
   sniff inspects the message body because the Batch endpoint sometimes returns a
   credit-balance error wrapped in a Cloudflare 5xx.
-* `MockBackend` — fully offline, deterministic. Lets anyone clone the repo and
+* `MockBackend`: fully offline, deterministic. Lets anyone clone the repo and
   run the entire pipeline (including a simulated Batch round-trip) end-to-end
   with no API key and zero spend, while still exercising every branch.
 
@@ -108,7 +108,7 @@ class AnthropicBackend:
             kwargs["tool_choice"] = tool_choice
         try:
             return self._client.messages.create(**kwargs)  # SDK msg is duck-compatible
-        except Exception as exc:  # noqa: BLE001 — re-raised as our taxonomy
+        except Exception as exc:  # noqa: BLE001 (re-raised as our taxonomy)
             raise self._translate(exc) from exc
 
     def create_batch(self, requests) -> str:
@@ -142,7 +142,7 @@ class AnthropicBackend:
     def cancel_batch(self, batch_id) -> None:
         try:
             self._client.messages.batches.cancel(batch_id)
-        except Exception:  # noqa: BLE001 — best effort
+        except Exception:  # noqa: BLE001 (best effort)
             pass
 
 

@@ -5,7 +5,7 @@ chokepoint for four things that otherwise get scattered (and forgotten):
 
 1. **Hard budget cap.** A running estimate is checked after every call; the
    instant it crosses `--max-cost`, the run aborts cleanly with exit code 2.
-2. **Credit-out fail-fast.** `CreditOutError` is never retried — retrying an
+2. **Credit-out fail-fast.** `CreditOutError` is never retried. Retrying an
    empty account just burns the rate limit and the clock.
 3. **Smart retry.** Only `TransientError` is retried, with exponential backoff.
    `PermanentError` (400/auth) raises immediately.
@@ -38,7 +38,7 @@ class SpendCapExceeded(SystemExit):
 class SpendTracker:
     """Accumulates estimated spend and enforces the cap.
 
-    Token counts are estimates, not post-hoc actuals — the goal is a *safe upper
+    Token counts are estimates, not post-hoc actuals. The goal is a *safe upper
     bound* that trips the cap before real money is spent, which is exactly when
     you want to find out, not after reconciling an invoice.
     """
@@ -64,7 +64,7 @@ class SpendTracker:
             self._last_log_at = self.calls
             print(f"  [spend] ${self.estimate():.4f} across {self.calls} calls", flush=True)
         if self.estimate() > self.max_cost:
-            print(f"\n[!] SPEND CAP HIT — est ${self.estimate():.4f} > cap "
+            print(f"\n[!] SPEND CAP HIT: est ${self.estimate():.4f} > cap "
                   f"${self.max_cost:.2f}. Aborting to prevent further spend.", flush=True)
             self.summary()
             self.write_log("SPEND_CAP_HIT")
@@ -133,7 +133,7 @@ def guarded_call(fn, *, tracker: SpendTracker, model: str,
             last = e
             if not retry or attempt >= max_retries:
                 raise
-            print(f"  [retry] {e} — attempt {attempt + 1}/{max_retries + 1}; "
+            print(f"  [retry] {e}: attempt {attempt + 1}/{max_retries + 1}; "
                   f"backoff {backoff}s", flush=True)
             time.sleep(backoff)
             backoff = min(120, backoff * 2)

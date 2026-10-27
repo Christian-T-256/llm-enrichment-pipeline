@@ -6,7 +6,7 @@ output is any good. So on the first run for a given dataset, we dump a sample of
 the post-extraction state to CSV and block until a human signals approval (by
 creating a marker file). Subsequent runs of the same dataset auto-pass.
 
-It's a deliberately low-tech gate — a CSV and a touch-file — because the point
+It's a deliberately low-tech gate (a CSV and a touch-file) because the point
 is a forced human glance before thousands of records ship, not a UI.
 """
 
@@ -50,11 +50,11 @@ def approve(gate_dir: str, dataset_key: str) -> None:
 
 def require_approval(records: list[dict], gate_dir: str, dataset_key: str) -> bool:
     """Returns True if clear to proceed. On first run, writes the sample and
-    returns False with instructions — the caller stops the run cleanly."""
+    returns False with instructions; the caller stops the run cleanly."""
     if is_approved(gate_dir, dataset_key):
         return True
     path = write_sample(records, gate_dir, dataset_key)
-    print("\n  [review-gate] First run for this dataset — paused for review.")
+    print("\n  [review-gate] First run for this dataset: paused for review.")
     print(f"  [review-gate] Inspect the sample: {path}")
     print(f"  [review-gate] Approve to proceed:")
     print(f"      touch {_marker_path(gate_dir, dataset_key)}")

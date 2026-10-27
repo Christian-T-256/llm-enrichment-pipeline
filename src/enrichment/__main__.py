@@ -84,7 +84,7 @@ def main(argv: list[str] | None = None) -> int:
 
     if args.dry_run:
         backend = MockBackend()
-        print("[mode] DRY RUN — offline mock backend, no API key, no spend.")
+        print("[mode] DRY RUN: offline mock backend, no API key, no spend.")
     else:
         _load_dotenv()
         key = os.environ.get("ANTHROPIC_API_KEY")
@@ -102,7 +102,7 @@ def main(argv: list[str] | None = None) -> int:
         summary = run(args.input, args.output, ctx,
                       dataset_key=dataset_key, gate_dir=args.gate_dir)
     except CreditOutError as e:
-        print(f"\n[!] CREDIT-OUT — aborting without retry: {e}", file=sys.stderr)
+        print(f"\n[!] CREDIT-OUT: aborting without retry: {e}", file=sys.stderr)
         tracker.write_log("CREDIT_OUT")
         return 3
 

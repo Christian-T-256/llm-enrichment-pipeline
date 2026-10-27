@@ -3,7 +3,7 @@
 The pipeline never catches vendor SDK exceptions directly. Each backend maps its
 own failures onto these three classes, so the retry/guard logic stays identical
 whether it's talking to the real API or the mock. The split that matters is
-*permanent vs transient vs out-of-money* — those three demand different
+*permanent vs transient vs out-of-money*. Those three demand different
 responses, and conflating them is how you burn a budget retrying a 400.
 """
 

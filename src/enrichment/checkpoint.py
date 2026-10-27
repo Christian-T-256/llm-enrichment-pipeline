@@ -1,8 +1,8 @@
 """Persist upstream state right before the expensive batch submission.
 
 The extraction stages cost real money (four model calls per record). If the
-batch submission then dies — Cloudflare 5xx, a network blip, an interrupted
-process — that upstream work is gone unless it was written down. This module
+batch submission then dies (Cloudflare 5xx, a network blip, an interrupted
+process), that upstream work is gone unless it was written down. This module
 writes it down. `--resume-checkpoint <path>` reloads it and skips straight to
 generation, turning a crash into a cheap restart instead of a full re-run.
 """

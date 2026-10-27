@@ -1,8 +1,8 @@
 """Structured extraction + reconciliation + grounding.
 
-Each record carries two independent text sources — a short `profile_text`
+Each record carries two independent text sources: a short `profile_text`
 (think: a self-description) and longer `website_text` (scraped marketing copy).
-We extract a single attribute from each — the **segment** the entity serves —
+We extract a single attribute from each (the **segment** the entity serves),
 then reconcile, sanity-check, and ground-verify it.
 
 Two design decisions worth calling out:
@@ -10,7 +10,7 @@ Two design decisions worth calling out:
 * **Tool-use, not "respond only with JSON."** Every extraction is a forced
   tool call with an explicit `input_schema`. The prose-JSON approach this
   replaced produced a low-but-nonzero rate of unparseable output (truncation,
-  stray preamble, and — the nasty one — a list where a string was promised that
+  stray preamble, and (the nasty one) a list where a string was promised that
   blew up `.strip()` three stages downstream). Schema enforcement deleted that
   entire failure class. `_coerce_to_str` stays as belt-and-suspenders anyway.
 
@@ -229,7 +229,7 @@ def verify_grounded(record: dict, segment: str, website_text: str,
                     ctx: RunContext) -> bool:
     """Strict hallucination check: is `segment` actually supported by the source?
 
-    Fails *open* on a verifier error (returns True) — a flaky verifier should not
+    Fails *open* on a verifier error (returns True). A flaky verifier should not
     silently drop good claims. The caller treats a `False` here as 'downgrade one
     notch', not 'discard', so a wrong claim still loses its `high`.
     """
@@ -255,7 +255,7 @@ def verify_grounded(record: dict, segment: str, website_text: str,
             in_tokens=len(prompt) // 4 + 120, out_tokens=60)
     except CreditOutError:
         raise  # out of money is fatal to the whole run, not soft to one record
-    except Exception as e:  # noqa: BLE001 — any other verifier glitch fails open
+    except Exception as e:  # noqa: BLE001 (any other verifier glitch fails open)
         print(f"  [verify] soft error, failing open: {e}", flush=True)
         return True
     data = _tool_input(msg, "verify_segment_grounded")

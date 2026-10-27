@@ -35,7 +35,7 @@ from .spend import guarded_call
 
 SEGMENT_ANCHORED_SYSTEM = (
     "You write a two-sentence analyst note about a company. Sentence one is a "
-    "concrete, specific observation about their actual work — a method, an "
+    "concrete, specific observation about their actual work: a method, an "
     "unusual combination, a niche, a number. Sentence two names the segment they "
     "serve and how their positioning fits it. You are a peer who read their "
     "material, not a marketer. No filler, no superlatives, no brand slogans.")
@@ -47,14 +47,14 @@ SEGMENT_ANCHORED_PROMPT = (
 
 OBSERVATION_SYSTEM = (
     "You write one concrete, specific sentence about what a company actually "
-    "does — something a careful reader would notice. You are a peer, not a "
+    "does, something a careful reader would notice. You are a peer, not a "
     "marketer. No filler, no superlatives, no brand slogans.")
 
 OBSERVATION_PROMPT = (
     "Company: {company}\nHeadline: {headline}\nProfile: {profile}\n"
     "Website: {website}\n\nWrite the single observation sentence.")
 
-# Banned filler — a generated note containing any of these fails validation.
+# Banned filler: a generated note containing any of these fails validation.
 BANNED_FILLER = ("cutting-edge", "world-class", "best-in-class", "synergy",
                  "leading provider", "industry-leading", "game-changing",
                  "next-level", "revolutionary")
@@ -102,7 +102,7 @@ def healthcheck(ctx: RunContext) -> None:
         tracker=ctx.tracker, model=GENERATE_MODEL,
         in_tokens=10, out_tokens=5, batch=True, max_retries=2)
     ctx.backend.cancel_batch(bid)
-    print("  [healthcheck] ok — endpoint reachable, credits available", flush=True)
+    print("  [healthcheck] ok: endpoint reachable, credits available", flush=True)
 
 
 def submit_and_poll(requests: list[dict], ctx: RunContext,
@@ -122,7 +122,7 @@ def submit_and_poll(requests: list[dict], ctx: RunContext,
             status = ctx.backend.poll_batch(batch_id)
         except CreditOutError:
             raise
-        except Exception as e:  # noqa: BLE001 — transient poll error, keep waiting
+        except Exception as e:  # noqa: BLE001 (transient poll error, keep waiting)
             print(f"  transient poll error ({e}); retrying...", flush=True)
             time.sleep(poll_interval)
             continue
@@ -137,7 +137,7 @@ def submit_and_poll(requests: list[dict], ctx: RunContext,
 
 def clean(text: str) -> str:
     """Strip whole-line-wrapping quotes only. Never lowercase, never strip
-    terminal periods — the two-sentence format depends on them, and an earlier
+    terminal periods. The two-sentence format depends on them, and an earlier
     `rstrip('.')` silently stripped end punctuation off most outputs."""
     s = (text or "").strip()
     if len(s) >= 4 and s.startswith('"') and s.endswith('"') and '"' not in s[1:-1]:
